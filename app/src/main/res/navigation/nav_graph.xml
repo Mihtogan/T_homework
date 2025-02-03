@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/generalStatisticsFragment">
+
+    <fragment
+        android:id="@+id/generalStatisticsFragment"
+        android:name="com.tinkoff.android_homework.presentation.general_statistics.GeneralStatisticsFragment"
+        android:label="fragment_general_statistics"
+        tools:layout="@layout/fragment_general_statistics" >
+        <action
+            android:id="@+id/action_generalStatisticsFragment_to_detailFragment2"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.tinkoff.android_homework.presentation.detail.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" />
+</navigation>

@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.tinkoff.android_homework"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.tinkoff.android_homework"

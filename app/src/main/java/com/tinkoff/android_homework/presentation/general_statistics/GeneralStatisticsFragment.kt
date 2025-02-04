@@ -21,7 +21,9 @@ import kotlinx.coroutines.launch
 class GeneralStatisticsFragment : Fragment() {
     private val viewModel: GeneralStatisticsViewModel by viewModels()
 
-    private val operationAdapter = OperationAdapter()
+    private val operationAdapter = OperationAdapter({
+        Log.d("MyTag", "id: $it")
+    })
 
     private var _binding: FragmentGeneralStatisticsBinding? = null
 
@@ -42,9 +44,12 @@ class GeneralStatisticsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //findNavController().navigate(R.id.action_generalStatisticsFragment_to_detailFragment)
+
         initOperationsRecycler()
         subscribeToOperations()
         subscribeToTotal()
+
     }
 
     override fun onDestroyView() {
@@ -68,7 +73,7 @@ class GeneralStatisticsFragment : Fragment() {
     private fun subscribeToOperations() {
         lifecycleScope.launch {
             viewModel.operations.collect {
-                operationAdapter.data = it
+                operationAdapter.submitList(it)
             }
         }
     }

@@ -2,6 +2,7 @@ package com.tinkoff.android_homework.data.network.mappers.detail
 
 import com.tinkoff.android_homework.data.network.entities.details.DetailApi
 import com.tinkoff.android_homework.data.storage.entities.DetailDb
+import com.tinkoff.android_homework.presentation.model.operations.OperationType
 import java.util.UUID
 import javax.inject.Inject
 
@@ -12,8 +13,8 @@ class DetailApiToDbMapper @Inject constructor() : (DetailApi) -> DetailDb {
 
     override fun invoke(detail: DetailApi): DetailDb {
         return DetailDb(
-            id = UUID.randomUUID().timestamp(),
-            type = detail.type,
+            id = UUID.randomUUID().hashCode().toLong(),//TODO
+            type = OperationType.INCOME,//TODO
             comment = detail.comment,
             positions = detail.positions
         )

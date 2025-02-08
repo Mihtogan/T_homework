@@ -5,6 +5,7 @@ import com.tinkoff.android_homework.data.network.mappers.detail.DetailApiToDbMap
 import com.tinkoff.android_homework.data.network.repo.utils.InternetChecker
 import com.tinkoff.android_homework.data.network.services.DetailService
 import com.tinkoff.android_homework.data.storage.dao.DetailDao
+import com.tinkoff.android_homework.data.storage.dao.OperationDao
 import com.tinkoff.android_homework.domain.main.entities.Detail
 import javax.inject.Inject
 
@@ -20,6 +21,7 @@ interface DetailRepository {
 class SubscribeDetailRepositoryImpl @Inject constructor(
     private val detailService: DetailService,
     private val detailDao: DetailDao,
+    private val operationDao: OperationDao,
     private val detailApiToDbMapper: DetailApiToDbMapper,
     private val detailDbToDomainMapper: DetailDbToDomainMapper,
     private val internetChecker: InternetChecker,
@@ -29,9 +31,13 @@ class SubscribeDetailRepositoryImpl @Inject constructor(
     override suspend fun getDetail(id: Int): Detail {
         if (internetChecker.isInternetAvailable()) {
             val detailApi = detailService.getDetail(id)
-            detailDao.insertAll(detailApiToDbMapper.invoke(detailApi))
+            val detDb = detailApiToDbMapper.invoke(
+                detailApi,
+                id.toLong(),
+                operationDao.getById(id.toLong()).type
+            )
+            detailDao.insert(detDb)
         }
-
-        return detailDbToDomainMapper.invoke(detailDao.getAll())
+        return detailDbToDomainMapper.invoke(detailDao.getById(id.toLong()))
     }
 }

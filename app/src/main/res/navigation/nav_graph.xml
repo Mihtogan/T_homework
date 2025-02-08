@@ -9,7 +9,7 @@
         android:id="@+id/generalStatisticsFragment"
         android:name="com.tinkoff.android_homework.presentation.general_statistics.GeneralStatisticsFragment"
         android:label="fragment_general_statistics"
-        tools:layout="@layout/fragment_general_statistics" >
+        tools:layout="@layout/fragment_general_statistics">
         <action
             android:id="@+id/action_generalStatisticsFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
@@ -18,5 +18,9 @@
         android:id="@+id/detailFragment"
         android:name="com.tinkoff.android_homework.presentation.detail.DetailFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
 </navigation>

@@ -15,6 +15,9 @@ interface OperationDao {
     @Query("SELECT * FROM ${OperationDb.OPERATION_TABLE_NAME}")
     suspend fun getAll(): List<OperationDb>
 
+    @Query("SELECT * FROM ${OperationDb.OPERATION_TABLE_NAME} WHERE id=:id")
+    suspend fun getById(id: Long): OperationDb
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg operations: OperationDb)
 }

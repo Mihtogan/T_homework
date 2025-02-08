@@ -1,5 +1,7 @@
 package com.tinkoff.android_homework.presentation.model.operations
 
+import com.tinkoff.android_homework.domain.main.entities.OperationType
+
 /**
  * @author d.a.korotkov
  */

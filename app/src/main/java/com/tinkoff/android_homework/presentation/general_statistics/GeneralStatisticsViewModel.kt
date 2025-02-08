@@ -6,7 +6,7 @@ import com.tinkoff.android_homework.domain.main.usecases.SubscribeOperationsUseC
 import com.tinkoff.android_homework.domain.main.usecases.SubscribeTotalUseCase
 import com.tinkoff.android_homework.presentation.mappers.operations.OperationToUiItemMapper
 import com.tinkoff.android_homework.presentation.model.operations.OperationItem
-import com.tinkoff.android_homework.presentation.model.operations.OperationType
+import com.tinkoff.android_homework.domain.main.entities.OperationType
 import com.tinkoff.android_homework.presentation.model.total.TotalItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

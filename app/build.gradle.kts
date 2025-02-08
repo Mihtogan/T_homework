@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
+
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -85,7 +87,7 @@ dependencies {
     // Jetpack Navigation
     implementation(libs.navigation.graph.fragment)
     implementation(libs.navigation.graph.ui)
-//    implementation(libs.navigation.graph.safeargs)
+    implementation(libs.androidx.navigation.dynamic.features.fragment)
 
     // Hilt
     implementation(libs.hilt.android)

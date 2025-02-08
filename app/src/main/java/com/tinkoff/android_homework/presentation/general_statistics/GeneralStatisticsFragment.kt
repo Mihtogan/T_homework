@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.android_homework.databinding.FragmentGeneralStatisticsBinding
@@ -20,10 +21,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class GeneralStatisticsFragment : Fragment() {
     private val viewModel: GeneralStatisticsViewModel by viewModels()
-
-    private val operationAdapter = OperationAdapter({
-        Log.d("MyTag", "id: $it")
-    })
 
     private var _binding: FragmentGeneralStatisticsBinding? = null
 
@@ -44,10 +41,17 @@ class GeneralStatisticsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //findNavController().navigate(R.id.action_generalStatisticsFragment_to_detailFragment)
+        val operationAdapter = OperationAdapter { id ->
+            findNavController().navigate(
+                GeneralStatisticsFragmentDirections
+                    .actionGeneralStatisticsFragmentToDetailFragment(
+                        id
+                    )
+            )
+        }
 
-        initOperationsRecycler()
-        subscribeToOperations()
+        initOperationsRecycler(operationAdapter)
+        subscribeToOperations(operationAdapter)
         subscribeToTotal()
 
     }
@@ -70,16 +74,16 @@ class GeneralStatisticsFragment : Fragment() {
         }
     }
 
-    private fun subscribeToOperations() {
+    private fun subscribeToOperations(adapter: OperationAdapter) {
         lifecycleScope.launch {
             viewModel.operations.collect {
-                operationAdapter.submitList(it)
+                adapter.submitList(it)
             }
         }
     }
 
-    private fun initOperationsRecycler() {
-        operationsRecyclerView.adapter = operationAdapter
+    private fun initOperationsRecycler(adapter: OperationAdapter) {
+        operationsRecyclerView.adapter = adapter
         operationsRecyclerView.layoutManager = LinearLayoutManager(context)
     }
 }

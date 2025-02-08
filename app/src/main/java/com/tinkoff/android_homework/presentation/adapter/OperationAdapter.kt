@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.android_homework.R
 import com.tinkoff.android_homework.databinding.OperationRecyclerItemBinding
 import com.tinkoff.android_homework.presentation.model.operations.OperationItem
-import com.tinkoff.android_homework.presentation.model.operations.OperationType
+import com.tinkoff.android_homework.domain.main.entities.OperationType
 
 /**
  * @author d.a.korotkov
  */
-class OperationAdapter(private val listener: (Long) -> Unit) :
+class OperationAdapter(private val listener: (Int) -> Unit) :
     ListAdapter<OperationItem, OperationAdapter.Holder>(Comparator()) {
 
     inner class Holder(view: View) : RecyclerView.ViewHolder(view) {
@@ -31,7 +31,7 @@ class OperationAdapter(private val listener: (Long) -> Unit) :
             operationSum.text = item.operationSum.toString()
 
             root.setOnClickListener {
-                listener(item.id)
+                listener(item.id.toInt())
             }
         }
     }

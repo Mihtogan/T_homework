@@ -1,5 +1,7 @@
 package com.tinkoff.android_homework.presentation.general_statistics
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tinkoff.android_homework.domain.main.usecases.SubscribeOperationsUseCase
@@ -9,9 +11,6 @@ import com.tinkoff.android_homework.presentation.model.operations.OperationItem
 import com.tinkoff.android_homework.domain.main.entities.OperationType
 import com.tinkoff.android_homework.presentation.model.total.TotalItem
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -21,14 +20,14 @@ import javax.inject.Inject
 class GeneralStatisticsViewModel @Inject constructor(
     private val subscribeTotalUseCase: SubscribeTotalUseCase,
     private val subscribeOperationsUseCase: SubscribeOperationsUseCase,
-    val uiMapper: OperationToUiItemMapper,
+    private val uiMapper: OperationToUiItemMapper,
 ) : ViewModel() {
 
-    private val _operations: MutableStateFlow<List<OperationItem>> = MutableStateFlow(emptyList())
-    val operations: StateFlow<List<OperationItem>> = _operations.asStateFlow()
+    private val _operations = MutableLiveData<List<OperationItem>>()
+    val operations: LiveData<List<OperationItem>> get() = _operations
 
-    private val _total: MutableStateFlow<TotalItem?> = MutableStateFlow(null)
-    val total: StateFlow<TotalItem?> = _total.asStateFlow()
+    private val _total = MutableLiveData<TotalItem?>()
+    val total: LiveData<TotalItem?> get() = _total
 
     init {
         viewModelScope.launch {
@@ -42,14 +41,14 @@ class GeneralStatisticsViewModel @Inject constructor(
                 .invoke()
                 .map { total ->
                     val incomes = _operations
-                        .value
+                        .value!!
                         .filter { it.operationType == OperationType.INCOME }
-                        .map { it.operationSum }.sum()
+                        .sumOf { it.operationSum }
 
                     val outcomes = _operations
-                        .value
+                        .value!!
                         .filter { it.operationType == OperationType.OUTCOME }
-                        .map { it.operationSum }.sum()
+                        .sumOf { it.operationSum }
 
                     val progress = (outcomes.toFloat() / incomes.toFloat()) * 100f
 

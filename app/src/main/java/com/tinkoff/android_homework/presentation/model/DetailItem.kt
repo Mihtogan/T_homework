@@ -9,5 +9,5 @@ data class DetailItem (
     val type: OperationType,
     val amount: Int,
     val comment: String,
-    val positions: List<String>
+    val positions: String
 )

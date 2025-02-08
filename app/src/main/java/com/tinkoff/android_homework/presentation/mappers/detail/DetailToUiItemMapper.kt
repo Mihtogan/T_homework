@@ -9,9 +9,9 @@ class DetailToUiItemMapper @Inject constructor() : (Detail) -> DetailItem {
     override operator fun invoke(p1: Detail): DetailItem {
         return DetailItem(
             type = p1.type,
-            amount = 0,
+            amount = p1.amount,
             comment = p1.comment,
-            positions = p1.positions
+            positions = p1.positions.joinToString(separator = ", ")
         )
     }
 }

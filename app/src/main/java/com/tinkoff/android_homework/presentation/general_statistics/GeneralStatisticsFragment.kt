@@ -2,21 +2,15 @@ package com.tinkoff.android_homework.presentation.general_statistics
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.android_homework.databinding.FragmentGeneralStatisticsBinding
 import com.tinkoff.android_homework.presentation.adapter.OperationAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class GeneralStatisticsFragment : Fragment() {
@@ -24,11 +18,7 @@ class GeneralStatisticsFragment : Fragment() {
 
     private var _binding: FragmentGeneralStatisticsBinding? = null
 
-    private val operationsRecyclerView: RecyclerView by lazy { _binding!!.operationsRecycler }
-    private val totalSum: TextView by lazy { _binding!!.statisticCard.sum }
-    private val outcome: TextView by lazy { _binding!!.statisticCard.outcome }
-    private val income: TextView by lazy { _binding!!.statisticCard.income }
-    private val progressBar: ProgressBar by lazy { _binding!!.statisticCard.progressBar }
+    private var operationAdapter: OperationAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,17 +31,18 @@ class GeneralStatisticsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val operationAdapter = OperationAdapter { id ->
-            findNavController().navigate(
-                GeneralStatisticsFragmentDirections
-                    .actionGeneralStatisticsFragmentToDetailFragment(
-                        id
-                    )
-            )
-        }
+        if (operationAdapter == null)
+            operationAdapter = OperationAdapter { id ->
+                findNavController().navigate(
+                    GeneralStatisticsFragmentDirections
+                        .actionGeneralStatisticsFragmentToDetailFragment(
+                            id
+                        )
+                )
+            }
 
-        initOperationsRecycler(operationAdapter)
-        subscribeToOperations(operationAdapter)
+        initOperationsRecycler(operationAdapter!!)
+        subscribeToOperations(operationAdapter!!)
         subscribeToTotal()
 
     }
@@ -62,28 +53,28 @@ class GeneralStatisticsFragment : Fragment() {
     }
 
     private fun subscribeToTotal() {
-        lifecycleScope.launch {
-            viewModel.total.collect { totalItem ->
+        viewModel.total.observe(viewLifecycleOwner) { totalItem ->
+            with(_binding!!.statisticCard) {
+
                 income.text = totalItem?.income.toString()
                 outcome.text = totalItem?.outcome.toString()
-                totalSum.text = totalItem?.total.toString()
+                sum.text = totalItem?.total.toString()
 
-                Log.e("TAGRTRT", "totalItem?.progress :${totalItem?.progress}")
                 progressBar.progress = totalItem?.progress?.toInt() ?: 0
             }
         }
     }
 
     private fun subscribeToOperations(adapter: OperationAdapter) {
-        lifecycleScope.launch {
-            viewModel.operations.collect {
-                adapter.submitList(it)
-            }
+        viewModel.operations.observe(viewLifecycleOwner) {
+            adapter.submitList(it.toList())
         }
     }
 
     private fun initOperationsRecycler(adapter: OperationAdapter) {
-        operationsRecyclerView.adapter = adapter
-        operationsRecyclerView.layoutManager = LinearLayoutManager(context)
+        with(_binding!!.operationsRecycler) {
+            this.adapter = adapter
+            layoutManager = LinearLayoutManager(context)
+        }
     }
 }

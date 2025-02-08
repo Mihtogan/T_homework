@@ -3,48 +3,64 @@ package com.tinkoff.android_homework.presentation.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.android_homework.R
+import com.tinkoff.android_homework.databinding.OperationRecyclerItemBinding
 import com.tinkoff.android_homework.presentation.model.operations.OperationItem
-import com.tinkoff.android_homework.presentation.model.operations.OperationType
+import com.tinkoff.android_homework.domain.main.entities.OperationType
 
 /**
  * @author d.a.korotkov
  */
-class OperationAdapter : RecyclerView.Adapter<OperationAdapter.OperationViewHolder>() {
+class OperationAdapter(private val listener: (Int) -> Unit) :
+    ListAdapter<OperationItem, OperationAdapter.Holder>(Comparator()) {
 
-    var data: List<OperationItem> = emptyList()
-        set(newValue) {
-            field = newValue
-            notifyDataSetChanged()
-        }
+    inner class Holder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding = OperationRecyclerItemBinding.bind(view)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OperationViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.operation_recycler_item, parent, false)
-        return OperationViewHolder(itemView)
-    }
-
-    override fun getItemCount(): Int = data.size
-
-    override fun onBindViewHolder(holder: OperationViewHolder, position: Int) {
-        data[position].let { operationItem ->
-            val operationIcon = when (operationItem.operationType) {
+        fun bind(item: OperationItem) = with(binding) {
+            val operIcon = when (item.operationType) {
                 OperationType.OUTCOME -> R.drawable.spending_icon
                 OperationType.INCOME -> R.drawable.income_icon
             }
-            holder.operationIcon.setImageResource(operationIcon)
+            operationIcon.setImageResource(operIcon)
 
-            holder.operationTitle.text = operationItem.operationTitle
-            holder.operationSum.text = operationItem.operationSum.toString()
+            operationTitle.text = item.operationTitle
+            operationSum.text = item.operationSum.toString()
+
+            root.setOnClickListener {
+                listener(item.id.toInt())
+            }
         }
     }
 
-    class OperationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val operationIcon: ImageView = itemView.findViewById(R.id.operation_icon)
-        val operationTitle: TextView = itemView.findViewById(R.id.operation_title)
-        val operationSum: TextView = itemView.findViewById(R.id.operation_sum)
+    class Comparator : DiffUtil.ItemCallback<OperationItem>() {
+        override fun areItemsTheSame(
+            oldItem: OperationItem,
+            newItem: OperationItem
+        ): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(
+            oldItem: OperationItem,
+            newItem: OperationItem
+        ): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.operation_recycler_item, parent, false)
+        return Holder(itemView)
+    }
+
+
+    override fun onBindViewHolder(holder: Holder, position: Int) {
+        holder.bind(getItem(position))
     }
 }

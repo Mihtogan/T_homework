@@ -13,7 +13,7 @@ class OperationsDbToDomainMapper @Inject constructor() : (List<OperationDb>) -> 
     override fun invoke(operations: List<OperationDb>): Operations {
         return Operations(
             operations = operations.map { operation ->
-                Operation(operation.type, operation.name, operation.amount)
+                Operation(operation.id, operation.type, operation.name, operation.amount)
             }
         )
     }

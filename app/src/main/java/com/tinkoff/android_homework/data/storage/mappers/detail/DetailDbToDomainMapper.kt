@@ -12,6 +12,7 @@ class DetailDbToDomainMapper @Inject constructor() : (DetailDb) -> Detail {
     override fun invoke(detailDb: DetailDb): Detail {
         return Detail(
             type = detailDb.type,
+            amount = detailDb.amount,
             comment = detailDb.comment,
             positions = detailDb.positions
         )

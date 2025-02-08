@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
+
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -49,9 +51,9 @@ android {
         jvmTarget = "17"
     }
 
-//    buildFeatures {
-//        viewBinding = true
-//    }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -75,13 +77,17 @@ dependencies {
 
     // Room
     implementation(libs.room.runtime)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.fragment.ktx)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
 
     // Jetpack Navigation
     implementation(libs.navigation.graph.fragment)
     implementation(libs.navigation.graph.ui)
-//    implementation(libs.navigation.graph.safeargs)
+    implementation(libs.androidx.navigation.dynamic.features.fragment)
 
     // Hilt
     implementation(libs.hilt.android)

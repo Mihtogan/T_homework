@@ -1,4 +1,4 @@
-package com.tinkoff.android_homework.presentation.model.operations
+package com.tinkoff.android_homework.domain.main.entities
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

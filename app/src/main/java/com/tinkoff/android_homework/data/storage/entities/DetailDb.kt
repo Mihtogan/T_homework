@@ -3,7 +3,7 @@ package com.tinkoff.android_homework.data.storage.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.tinkoff.android_homework.data.storage.entities.DetailDb.Companion.DETAILS_TABLE_NAME
-import com.tinkoff.android_homework.presentation.model.operations.OperationType
+import com.tinkoff.android_homework.domain.main.entities.OperationType
 
 /**
  * @author d.shtaynmets
@@ -13,6 +13,7 @@ data class DetailDb(
     @PrimaryKey
     val id: Long,
     val type: OperationType,
+    val amount: Int,
     val comment: String,
     val positions: List<String>,
 ) {

@@ -1,19 +1,16 @@
 package com.tinkoff.android_homework.presentation.detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.tinkoff.android_homework.R
 import com.tinkoff.android_homework.databinding.FragmentDetailBinding
 import com.tinkoff.android_homework.domain.main.entities.OperationType
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 /**
  * @author d.shtaynmets
